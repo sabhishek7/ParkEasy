@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ParkEase | Search</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css?v=3">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body style="padding-top: var(--nav-height); overflow: hidden;">
@@ -39,9 +39,10 @@
         <!-- List View -->
         <div class="scrollable-list">
             <!-- Filter Bar -->
-            <div class="card card-sm mb-2 flex items-center gap-2">
-                <i class="fas fa-filter text-muted"></i>
-                <input type="text" id="searchInput" placeholder="Filter by name..." class="input-field input-minimal">
+            <div class="search-toolbar">
+                <i class="fas fa-search text-muted"></i>
+                <input type="text" id="searchInput" placeholder="Search by name, city, or event..." class="input-field">
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Filter</button>
             </div>
 
             <!-- Results -->
@@ -61,12 +62,9 @@
 
         <!-- Map View -->
         <div class="map-placeholder">
-            <div class="text-center">
-                <div class="map-icon-circle">
-                    <i class="fas fa-map-marked-alt fa-2x" style="color: var(--primary);"></i>
-                </div>
-                <h3 style="margin-bottom: 0.5rem;">Interactive Map</h3>
-                <p class="text-muted">Google Maps Integration Coming Soon</p>
+            <div class="map-placeholder-bg">
+                <div class="map-overlay"></div>
+                <!-- Pins injected by JS -->
             </div>
         </div>
     </div>
@@ -179,6 +177,65 @@
                 `;
                 list.appendChild(item);
             });
+
+            // Update Map Pins
+            renderMapPins(items);
+        }
+
+        function renderMapPins(items) {
+            const mapContainer = document.querySelector('.map-placeholder');
+            const bg = mapContainer.querySelector('.map-placeholder-bg');
+            
+            // Clear previous pins (keep overlay)
+            const existingPins = bg.querySelectorAll('.map-pin');
+            existingPins.forEach(p => p.remove());
+
+            if(items.length === 0) return;
+
+            // Generate fake coordinates for demo
+            items.forEach((loc, index) => {
+                const pin = document.createElement('div');
+                pin.className = 'map-pin';
+                pin.innerHTML = `<i class="fas fa-parking"></i>`;
+                
+                // Random position for demo
+                const top = 20 + (index * 15) % 60 + Math.random() * 10; 
+                const left = 20 + (index * 25) % 60 + Math.random() * 10;
+                
+                pin.style.top = `${top}%`;
+                pin.style.left = `${left}%`;
+                pin.title = loc.name;
+
+                // Interaction
+                pin.addEventListener('mouseenter', () => {
+                    pin.classList.add('active');
+                    highlightCard(index);
+                });
+
+                pin.addEventListener('mouseleave', () => {
+                    pin.classList.remove('active');
+                    unhighlightCard(index);
+                });
+
+                bg.appendChild(pin);
+            });
+        }
+
+        function highlightCard(index) {
+            const cards = document.querySelectorAll('.parking-card');
+            if(cards[index]) {
+                cards[index].style.transform = 'scale(1.02)';
+                cards[index].style.borderColor = 'var(--primary)';
+                cards[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function unhighlightCard(index) {
+            const cards = document.querySelectorAll('.parking-card');
+            if(cards[index]) {
+                cards[index].style.transform = '';
+                cards[index].style.borderColor = '';
+            }
         }
     </script>
     <script type="module" src="js/app.js"></script>

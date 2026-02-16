@@ -56,7 +56,8 @@ function renderDetails(loc) {
     ];
 
     container.innerHTML = `
-        <div class="grid-split animate-fade-in" style="gap: 3rem; height: auto; grid-template-columns: 1.2fr 0.8fr;">
+        <div class="details-grid animate-fade-in">
+            <!-- Left Column: Details -->
             <div>
                 <div style="position: relative; overflow: hidden; border-radius: 16px; box-shadow: var(--shadow-md);">
                         <img src="${loc.image}" style="width:100%; height:400px; object-fit:cover; transition: transform 0.3s;" alt="${loc.name}" class="hover:scale-105">
@@ -85,8 +86,9 @@ function renderDetails(loc) {
                 </div>
             </div>
             
+            <!-- Right Column: Booking Form -->
             <div>
-                <div class="card" style="position: sticky; top: calc(var(--nav-height) + 1rem);">
+                <div class="card" style="position: sticky; top: calc(var(--nav-height) + 1rem); z-index: 10;">
                     <h1 class="mb-1" style="font-size: 1.75rem;">${loc.name}</h1>
                     <p class="text-muted mb-4"><i class="fas fa-map-marker-alt text-danger"></i> ${loc.address}</p>
                     
@@ -108,17 +110,17 @@ function renderDetails(loc) {
 
                     <div class="mb-4">
                         <label class="block mb-1 font-bold text-sm">Select Date</label>
-                        <input type="date" id="dateInput" class="input-field" value="${new Date().toISOString().split('T')[0]}" style="background: #f8fafc;">
+                        <input type="date" id="dateInput" class="input-field" value="${new Date().toISOString().split('T')[0]}" style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color);">
                     </div>
 
                     <div class="grid-2 gap-2 mb-4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div>
                             <label class="block mb-1 font-bold text-sm">Start Time</label>
-                            <input type="time" id="timeInput" class="input-field" value="12:00" style="background: #f8fafc;">
+                            <input type="time" id="timeInput" class="input-field" value="12:00" style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color);">
                         </div>
                         <div>
                             <label class="block mb-1 font-bold text-sm">Duration</label>
-                            <select id="durationInput" class="input-field" style="background: #f8fafc; cursor: pointer;">
+                            <select id="durationInput" class="input-field" style="background: #f8fafc; cursor: pointer; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); width: 100%;">
                                 <option value="1">1 Hour</option>
                                 <option value="2" selected>2 Hours</option>
                                 <option value="3">3 Hours</option>
